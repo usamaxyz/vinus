@@ -1,6 +1,6 @@
 {
   "name": "vinus",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "All in one compiler. Gulp automated tasks for compiling styles (css, less and sass) and javascript (ES6, typescript).",
   "main": "index.js",
   "scripts": {
