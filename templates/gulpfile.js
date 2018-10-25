@@ -90,9 +90,7 @@ function styles() {
                 .pipe(gulpif(element.concat, concat(element.concat ? element.filename : notUsed)))
                 .pipe(gulpif(vinusObj.isProduction, cleanCss()))
                 //if element.concat => it is already renamed
-                .pipe(gulpif(!element.concat && element.filename, rename({
-                    basename: element.filename,
-                })))
+                .pipe(gulpif(!element.concat && element.filename, rename(element.filename)))
 
                 //emit original if withRtl() is used
                 .pipe(gulpif(element.generateRtl && vinusObj.isProduction, rename({
@@ -130,9 +128,7 @@ function scripts() {
                 .pipe(gulpif(browserifyStatus, buffer()))
                 .pipe(gulpif(element.concat, concat(element.concat ? element.filename : notUsed)))
                 //if element.concat => it is already renamed
-                .pipe(gulpif(!element.concat && element.filename, rename({
-                    basename: element.filename,
-                })))
+                .pipe(gulpif(!element.concat && element.filename, rename(element.filename)))
 
                 // .pipe(sourcemaps.init({ loadMaps: true }))
                 .pipe(gulpif(vinusObj.isProduction, uglify()))
@@ -177,9 +173,7 @@ function watch() {
 function copy() {
     let tasks = vinusObj.copies.map(function (element) {
         return gulp.src(element.src)
-            .pipe(gulpif(element.filename, rename({
-                basename: element.filename,
-            })))
+            .pipe(gulpif(element.filename && true, rename(element.filename)))
             .pipe(gulp.dest(element.dist));
     });
     // create a merged stream
