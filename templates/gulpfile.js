@@ -165,11 +165,23 @@ function watch() {
     logger.info('Watching...');
 }
 
+function copy() {
+    let tasks = vinusObj.copies.map(function (element) {
+        return gulp.src(element.src)
+            .pipe(gulpif(element.concat.status, concat(element.concat.fileName)))
+            .pipe(gulp.dest(element.dist));
+    });
+    // create a merged stream
+    if (tasks.length)
+        return es.merge.apply(null, tasks);
+}
+
 /*
  * end of core tasks
  */
 
 gulp.task('styles', styles);
 gulp.task('scripts', scripts);
-gulp.task('default', ['styles', 'scripts']);
+gulp.task('copy', copy);
+gulp.task('default', ['styles', 'scripts', 'copy']);
 gulp.task('watch', watch);
