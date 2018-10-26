@@ -1,28 +1,37 @@
 let logger = require('./logger'),
     vinus = (function () {
 
-        let obj = {
-            styles: [],
-            scripts: [],
-            copies: [],
+        const DEFAULT_GROUP = 'default';
+
+        let groups = [],
+            currentNode = undefined,
+            currentGroup = undefined;
+
+        let newGroup = function (name) {
+            currentGroup = {
+                name: name || DEFAULT_GROUP,
+                styles: [],
+                scripts: [],
+                copies: [],
+            };
+            groups.push(currentGroup);
+            return vinus;
         };
 
-        let current = undefined;
-
         let newCopy = function () {
-            current = {
+            currentNode = {
                 name: 'copy',
                 src: undefined,
                 dist: undefined,
                 filename: undefined,
                 concat: false,
             };
-            obj.copies.push(current);
+            currentGroup.copies.push(currentNode);
             return vinus;
         };
 
         let newCss = function () {
-            current = {
+            currentNode = {
                 name: 'css',
                 src: undefined,
                 dist: undefined,
@@ -32,12 +41,12 @@ let logger = require('./logger'),
                 isLess: false,
                 generateRtl: false,
             };
-            obj.styles.push(current);
+            currentGroup.styles.push(currentNode);
             return vinus;
         };
 
         let newJs = function () {
-            current = {
+            currentNode = {
                 name: 'js',
                 src: undefined,
                 dist: undefined,
@@ -56,32 +65,40 @@ let logger = require('./logger'),
                     // options: undefined,
                 },
             };
-            obj.scripts.push(current);
+            currentGroup.scripts.push(currentNode);
             return vinus;
         };
 
-        let get = function () {
-            obj.styles = obj.styles.filter(function (element) {
+        let get = function (group) {
+            if (!group)
+                group = DEFAULT_GROUP;
+
+            let _cg = groups.filter(g => g.name === group)[0];
+
+            if (!_cg)
+                return;
+
+            _cg.styles = _cg.styles.filter(function (element) {
                 if (element.src.length)
                     return element;
                 else
                     logger.warning(element.name + ': No styles found!');
             });
 
-            obj.scripts = obj.scripts.filter(function (element) {
+            _cg.scripts = _cg.scripts.filter(function (element) {
                 if (element.src.length)
                     return element;
                 else
                     logger.warning(element.name + ': No scripts found!');
             });
 
-            obj.copies = obj.copies.filter(function (element) {
+            _cg.copies = _cg.copies.filter(function (element) {
                 if (element.src.length)
                     return element;
                 else
                     logger.warning(element.name + ': No copies found!');
             });
-            return obj;
+            return _cg;
         };
 
         //shared
@@ -108,97 +125,91 @@ let logger = require('./logger'),
 
         //aliases
         let css = function (src, dist) {
-            let temp = newCss().src(src).dist(dist);
-            obj.styles[obj.styles.length - 1].name = 'css';
-            return temp;
+            return newCss().src(src).dist(dist);
         };
         let sass = function (src, dist) {
             let temp = newCss().src(src).dist(dist).asSass();
-            obj.styles[obj.styles.length - 1].name = 'sass';
+            currentNode.name = 'sass';
             return temp;
         };
         let less = function (src, dist) {
             let temp = newCss().src(src).dist(dist).asLess();
-            obj.styles[obj.styles.length - 1].name = 'less';
+            currentNode.name = 'less';
             return temp;
         };
 
         let js = function (src, dist) {
-            let temp = newJs().src(src).dist(dist);
-            obj.scripts[obj.scripts.length - 1].name = 'js';
-            return temp;
+            return newJs().src(src).dist(dist);
         };
         let vue = function (src, dist) {
             let temp = newJs().src(src).dist(dist).babelify().browserify();
-            obj.scripts[obj.scripts.length - 1].name = 'vue';
+            currentNode.name = 'vue';
             return temp;
         };
         let ts = function (src, dist) {
             let temp = newJs().src(src).dist(dist).babelify().browserify().asTs();
-            obj.scripts[obj.scripts.length - 1].name = 'ts';
+            currentNode.name = 'ts';
             return temp;
         };
         let babel = function (src, dist) {
             let temp = newJs().src(src).dist(dist).babelify();
-            obj.scripts[obj.scripts.length - 1].name = 'babel';
+            currentNode.name = 'babel';
             return temp;
         };
 
         let copy = function (src, dist) {
-            let temp = newCopy().src(src).dist(dist);
-            obj.copies[obj.copies.length - 1].name = 'copy';
-            return temp;
+            return newCopy().src(src).dist(dist);
         };
 
 
         return {
             src: function (src) {
-                current.src = src;
+                currentNode.src = src;
                 return this;
             },
             dist: function (dist) {
-                return _dist.call(this, dist, current);
+                return _dist.call(this, dist, currentNode);
             },
             rename: function (name) {
                 //the if here is for reason: 
                 // concat() without parameters and the name is already set => this if prevent override with undefined name
                 if (name)
-                    current.filename = name;
+                    currentNode.filename = name;
                 return this;
             },
             concat: function (name) {
-                current.concat = true;
+                currentNode.concat = true;
                 return this.rename(name);
             },
 
             asSass: function () {
-                current.isSass = true;
+                currentNode.isSass = true;
                 return this;
             },
             asLess: function () {
-                current.isLess = true;
+                currentNode.isLess = true;
                 return this;
             },
             withRtl: function () {
-                current.generateRtl = true;
+                currentNode.generateRtl = true;
                 return this;
             },
             babelify: function (opts) {
-                current.babel.status = true;
-                current.babel.options = opts;
+                currentNode.babel.status = true;
+                currentNode.babel.options = opts;
                 return this;
             },
             browserify: function () {
-                current.browserify.status = true;
-                if (Array.isArray(current.src))
-                    current.browserify.sourceName = current.src[0].split('/').pop();
+                currentNode.browserify.status = true;
+                if (Array.isArray(currentNode.src))
+                    currentNode.browserify.sourceName = currentNode.src[0].split('/').pop();
                 else
-                    current.browserify.sourceName = current.src.split('/').pop();
+                    currentNode.browserify.sourceName = currentNode.src.split('/').pop();
                 return this;
             },
             asTs: function (opts) {
-                current.typescript.status = true;
-                current.typescript.options = opts;
+                currentNode.typescript.status = true;
+                currentNode.typescript.options = opts;
                 return this;
             },
 
@@ -206,6 +217,7 @@ let logger = require('./logger'),
             newJs,
             newCss,
             newCopy,
+            newGroup,
             get,
 
             //aliases
@@ -219,5 +231,6 @@ let logger = require('./logger'),
             copy,
         };
     })();
+vinus.newGroup();
 
 module.exports = vinus;
