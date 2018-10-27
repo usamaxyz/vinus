@@ -108,9 +108,10 @@ let logger = require('./logger'),
                 return this;
             }
             else {
-                let pathArr = dist.split('/');
-                let fileName = pathArr.pop();
-                if (fileName.indexOf('.') !== -1) {
+                let pathArr = dist.split('/'),
+                    fileName = pathArr.pop(),
+                    index = fileName.indexOf('.');
+                if (index !== -1 && index !== 0) {
                     //path with file name
                     obj.dist = pathArr.join('/');
                     return this.concat(fileName);
@@ -231,6 +232,5 @@ let logger = require('./logger'),
             copy,
         };
     })();
-vinus.newGroup();
 
-module.exports = vinus;
+module.exports = vinus.newGroup();

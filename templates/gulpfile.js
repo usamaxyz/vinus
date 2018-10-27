@@ -42,7 +42,7 @@ let isProduction = !!args.prod,
 
 
 if (isProduction) {
-    logger.info('Production mode...');
+    logger.warning('Production mode...');
     process.env.NODE_ENV = 'production';
 }
 
