@@ -3,7 +3,7 @@
 
 ### Introduction
 
-Vinus is an abstruction built on top of Gulp. It helps you accomplish common Gulp tasks without any initial configuration. 
+Vinus help you achieve common javascript and css tasks (compile, minify, concat or even generate rtl css styles). Vinus is an abstruction built on top of Gulp so you can accomplish common Gulp tasks without any initial configuration.
 
 Vinus helps you in:
 - Compiling javascript
@@ -98,10 +98,10 @@ Alias Functions:
    
    
 ### Usage
-- `npm install vinus`
-- `npm install --global gulp-cli`
-- `npx vinus init` will copy `start.js`, `.babelrc`, `tsconfig.json`, `gulpfile.js`. Note: this command will not copy any file if it is already exist.
-- Build desired nodes in `start.js` using Vinus API
+- Install Gulp globally `npm install --global gulp-cli`
+- Install vinus `npm install vinus`
+- `npx vinus init` will generate `start.js`, `.babelrc`, `tsconfig.json`, `gulpfile.js`. Note: this command will not copy any file if it is already exist.
+- Use Vinus API to build desired nodes in `start.js` 
 - `gulp` to compile all nodes. You can use:
     - `gulp scripts` to compile js nodes only
     - `gulp styles` to compile css nodes only
