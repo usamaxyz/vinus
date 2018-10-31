@@ -51,7 +51,6 @@ vinus
         .src('src/js/index.js')
         //set node 3 distination
         .dist('dist/js')
-    ...
 ```
 
 #### Vinus API function list:
@@ -112,14 +111,14 @@ Alias Functions:
 
 
 ### Grouping Nodes
-You can organize your nodes into groups. For example you can use `newGroup('backend')` to create new group of nodes that are related to admin panel. And create another one `newGroup('frontend')` for the frontend.
+You can organize your nodes into groups. For example you can use `newGroup('backend')` to create a new group of nodes that are related to admin panel. And create another one `newGroup('frontend')` for the frontend.
 Then you can choose which group to compile using `--group` flag. For example to compile **backend** only:
 `gulp --group=backend`
 
 If no `--group` flag supplied, then Vinus compile the nodes that does not belong to any group.
 
 **Example** 
-```
+```javascript
 vinus
     //no group
     .css([
