@@ -107,7 +107,7 @@ Alias Functions:
     - `gulp styles` to compile css nodes only
     - `gulp copy` to compile copy nodes only
 - `gulp watch` to watch source files and run Gulp if any has changed
-
+- Use `--prod` flag to turn on production mode. This will minify output files.
 
 
 ### Grouping Nodes
