@@ -142,7 +142,7 @@ vinus
     .newGroup('vue')
     .js('src/js/vue/index.js', 'dist/js/vue/app.js')
 ```
-For this example: The command `gulp` will compile all the nodes except those that come after **vendors** group. While `gulp --group=vendors` will compile the 2 **copy** nodes.
+For this example: The command `gulp` will compile all the nodes except those that come after **vendors** and **vue** group. While `gulp --group=vendors` will compile the 2 **copy** nodes.
 
 
 Vinus is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
