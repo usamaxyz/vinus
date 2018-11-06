@@ -95,7 +95,13 @@ Alias Functions:
 - `copy(src, dist)`       
     - alias for: `newCopy().src(src).dist(dist)`
    
-   
+Configuration Functions:
+
+Vinus has several global options, you are free to customize them using:
+
+- `setGlobals(options)` where options is an object that has the desired values. Available options are: 
+   - `prodSuffix` of type `string` default is `'.min'`
+   - `rtlSuffix` of type `string` default is `'.rtl'`
    
 ### Usage
 - Install Gulp globally `npm install --global gulp-cli`
@@ -115,7 +121,9 @@ You can organize your nodes into groups. For example you can use `newGroup('back
 Then you can choose which group to compile using `--group` flag. For example to compile **backend** only:
 `gulp --group=backend`
 
-If no `--group` flag supplied, then Vinus compile the nodes that does not belong to any group.
+If no `--group` flag supplied, then Vinus compiles the nodes that does not belong to any group.
+
+Use `--all` flag to compile all groups.
 
 **Example** 
 ```javascript

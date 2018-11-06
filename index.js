@@ -1,15 +1,15 @@
-let logger = require('./logger'),
-    vinus = (function () {
-
-        const DEFAULT_GROUP = 'default';
-
+let vinus = (function () {
         let groups = [],
+            globals = {
+                prodSuffix:'.min',
+                rtlSuffix: '.rtl'
+            },
             currentNode = undefined,
             currentGroup = undefined;
 
         let newGroup = function (name) {
             currentGroup = {
-                name: name || DEFAULT_GROUP,
+                name: name,
                 styles: [],
                 scripts: [],
                 copies: [],
@@ -70,35 +70,33 @@ let logger = require('./logger'),
         };
 
         let get = function (group) {
-            if (!group)
-                group = DEFAULT_GROUP;
 
-            let _cg = groups.filter(g => g.name === group)[0];
+            if (!group) {
+                //Get all groups
+                let tempGroup = {
+                    name: 'All',
+                    styles: [],
+                    scripts: [],
+                    copies: [],
+                };
 
-            if (!_cg)
-                return;
+                for (let item of groups) {
+                    for(let s of item.styles) {
+                        tempGroup.styles.push(s);
+                    }
+                    for(let s of item.scripts) {
+                        tempGroup.scripts.push(s);
+                    }
+                    for(let s of item.copies) {
+                        tempGroup.copies.push(s);
+                    }
+                }
 
-            _cg.styles = _cg.styles.filter(function (element) {
-                if (element.src.length)
-                    return element;
-                else
-                    logger.warning(element.name + ': No styles found!');
-            });
+                return tempGroup;
+            }
 
-            _cg.scripts = _cg.scripts.filter(function (element) {
-                if (element.src.length)
-                    return element;
-                else
-                    logger.warning(element.name + ': No scripts found!');
-            });
-
-            _cg.copies = _cg.copies.filter(function (element) {
-                if (element.src.length)
-                    return element;
-                else
-                    logger.warning(element.name + ': No copies found!');
-            });
-            return _cg;
+            //return givin group or undefined
+            return groups.filter(g => g.name === group)[0];
         };
 
         //shared
@@ -172,7 +170,7 @@ let logger = require('./logger'),
                 return _dist.call(this, dist, currentNode);
             },
             rename: function (name) {
-                //the if here is for reason: 
+                //the if here is for reason:
                 // concat() without parameters and the name is already set => this if prevent override with undefined name
                 if (name)
                     currentNode.filename = name;
@@ -214,6 +212,16 @@ let logger = require('./logger'),
                 return this;
             },
 
+            setGlobals: function (obj) {
+                for (let k in obj)
+                    globals[k] = obj[k];
+                return this;
+            },
+
+            getGlobals: function() {
+                return globals;
+            },
+
             //root functions
             newJs,
             newCss,
@@ -233,4 +241,4 @@ let logger = require('./logger'),
         };
     })();
 
-module.exports = vinus.newGroup();
+module.exports = vinus.newGroup('default');
