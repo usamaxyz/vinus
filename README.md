@@ -3,7 +3,7 @@
 
 ### Introduction
 
-Vinus help you achieve common javascript and css tasks (compile, minify, concat or even generate rtl css styles). Vinus is an abstruction built on top of Gulp so you can accomplish common Gulp tasks without any initial configuration.
+Vinus help you achieve common javascript and css tasks (compile, minify, concat or even generate rtl css styles). Vinus is an abstruction built on top of Gulp v4 so you can accomplish common Gulp tasks without any initial configuration.
 
 Vinus helps you in:
 - Compiling javascript

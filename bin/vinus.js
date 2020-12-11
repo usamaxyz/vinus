@@ -41,7 +41,7 @@ function init() {
     }
     else
         logger.error('.babelrc already exist!');
-        
+
     if (!fs.existsSync('tsconfig.json')) {
         fs.createReadStream('node_modules/vinus/templates/tsconfig.json').pipe(fs.createWriteStream('tsconfig.json'));
         logger.success('tsconfig.json generated.');

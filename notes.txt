@@ -1,0 +1,25 @@
+I am using babel 6
+------------------
+
+
+babelify
+Babel browserify transform.
+
+Installation
+# Babel 7
+$ npm install --save-dev babelify @babel/core
+
+# Babel 6
+$ npm install --save-dev babelify@8 babel-core
+
+
+
+
+gulp-babel
+Use next generation JavaScript, today, with Babel
+
+# Babel 7
+$ npm install --save-dev gulp-babel @babel/core @babel/preset-env
+
+# Babel 6
+$ npm install --save-dev gulp-babel@7 babel-core babel-preset-env
