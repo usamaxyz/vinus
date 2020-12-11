@@ -1,6 +1,6 @@
 {
   "name": "vinus",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Vinus is an abstruction built on top of Gulp. It helps you accomplish common Gulp tasks without any initial configuration.",
   "main": "index.js",
   "scripts": {
